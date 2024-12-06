@@ -7,10 +7,10 @@ import {
 } from "@solidjs/router";
 import { eq } from "drizzle-orm";
 import { For, Show, Suspense } from "solid-js";
-import { db } from "~/db";
-import * as schema from "~/db/schema";
+import { db } from "@/db";
+import * as schema from "@/db/schema";
 import { renderSVG } from "uqr";
-import { DATE_FORMATTER } from "~/utils";
+import { DATE_FORMATTER } from "@/utils";
 
 const trackerById = query(async (id: string) => {
   "use server";

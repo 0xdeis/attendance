@@ -1,6 +1,6 @@
 import { action, redirect, useParams, useSubmission } from "@solidjs/router";
-import { db } from "~/db";
-import * as schema from "~/db/schema";
+import { db } from "@/db";
+import * as schema from "@/db/schema";
 
 const attendEvent = action(async (trackerId: string, formData: FormData) => {
   "use server";

@@ -6,9 +6,9 @@ import {
   useAction,
 } from "@solidjs/router";
 import { For, Suspense } from "solid-js";
-import { db } from "~/db";
-import * as schema from "~/db/schema";
-import { DATE_FORMATTER } from "~/utils";
+import { db } from "@/db";
+import * as schema from "@/db/schema";
+import { DATE_FORMATTER } from "@/utils";
 
 const createTrackerAction = action(async () => {
   "use server";
