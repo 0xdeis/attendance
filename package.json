@@ -1,0 +1,31 @@
+{
+  "name": "example-bare",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "@solidjs/router": "^0.15.1",
+    "@solidjs/start": "^1.0.10",
+    "drizzle-orm": "^0.37.0",
+    "nanoid": "^5.0.9",
+    "solid-js": "^1.9.2",
+    "uqr": "^0.1.2",
+    "vinxi": "^0.4.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@fsouza/prettierd": "^0.25.4",
+    "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.29.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16"
+  }
+}
