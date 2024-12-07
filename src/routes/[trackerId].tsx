@@ -1,27 +1,9 @@
-import {
-  RouteDefinition,
-  createAsync,
-  query,
-  redirect,
-  useParams,
-} from "@solidjs/router";
-import { eq } from "drizzle-orm";
-import { For, Show, Suspense } from "solid-js";
-import { db } from "@/db";
-import * as schema from "@/db/schema";
+import { RouteDefinition, createAsync, useParams } from "@solidjs/router";
+import { For, Show } from "solid-js";
 import { renderSVG } from "uqr";
 import { DATE_FORMATTER } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const trackerById = query(async (id: string) => {
-  "use server";
-  const tracker = await db.query.trackers.findFirst({
-    where: eq(schema.trackers.id, id),
-    with: { attendees: true },
-  });
-  if (!tracker) throw redirect("/");
-  return tracker;
-}, "trackerById");
+import { trackerById } from "@/actions";
 
 export const route = {
   preload({ params }) {
@@ -29,22 +11,34 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
+function getBaseUrl() {
+  if (typeof window !== "undefined") return window.location.origin;
+  if (process.env.URL) return `https://${process.env.URL}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
 export default function Tracker() {
   const params = useParams();
   const tracker = createAsync(() => trackerById(params.trackerId));
-  const attendUrl = `http://172.20.34.32:3000/attend/${params.trackerId}`;
+  const attendUrl = `${getBaseUrl()}/attend/${params.trackerId}`;
   const svgHtml = renderSVG(attendUrl);
 
   return (
     <div class="min-h-screen">
       <div class="max-w-6xl mx-auto px-4 py-8">
         <div class="flex items-center flex-col justify-center mb-8">
-          <h1 class="text-3xl font-bold text-gray-900">Attendance Tracker</h1>
-          <h2 class="text-lg text-gray-700">
-            <Show when={tracker()}>
-              {DATE_FORMATTER.format(tracker()?.createdAt)}
-            </Show>
-          </h2>
+          <Show when={tracker()}>
+            {(tracker) => (
+              <>
+                <h1 class="text-3xl font-bold text-gray-900">
+                  Attendance Tracker {tracker().closed && " (closed)"}
+                </h1>
+                <h2 class="text-lg text-gray-700">
+                  {DATE_FORMATTER.format(tracker()?.createdAt)}
+                </h2>
+              </>
+            )}
+          </Show>
         </div>
 
         <div class="flex flex-col md:flex-row gap-8">
