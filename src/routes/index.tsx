@@ -9,6 +9,7 @@ import { For, Suspense } from "solid-js";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { DATE_FORMATTER } from "@/utils";
+import { Button } from "@/components/ui/button";
 
 const createTrackerAction = action(async () => {
   "use server";
@@ -28,8 +29,10 @@ export default function Home() {
   const trackers = createAsync(async () => await getAllTrackers());
   const createTracker = useAction(createTrackerAction);
   return (
-    <div class="w-full h-full flex flex-col items-center justify-center">
-      <button onClick={() => createTracker()}>New Tracker</button>
+    <div class="flex flex-col">
+      <Button onClick={() => createTracker()} class="max-w-fit">
+        New Tracker
+      </Button>
       <Suspense fallback={"loading..."}>
         <For each={trackers()}>
           {(tracker) => (

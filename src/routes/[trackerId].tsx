@@ -11,6 +11,7 @@ import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { renderSVG } from "uqr";
 import { DATE_FORMATTER } from "@/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const trackerById = query(async (id: string) => {
   "use server";
@@ -35,27 +36,41 @@ export default function Tracker() {
   const svgHtml = renderSVG(attendUrl);
 
   return (
-    <div class="min-h-screen bg-black">
+    <div class="min-h-screen">
       <div class="max-w-6xl mx-auto px-4 py-8">
         <div class="flex items-center flex-col justify-center mb-8">
-          <h1 class="text-3xl font-bold text-gray-100">Attendance Tracker</h1>
-          <h2 class="text-lg text-gray-300">
+          <h1 class="text-3xl font-bold text-gray-900">Attendance Tracker</h1>
+          <h2 class="text-lg text-gray-700">
             <Show when={tracker()}>
               {DATE_FORMATTER.format(tracker()?.createdAt)}
             </Show>
           </h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div
-            innerHTML={svgHtml}
-            class="max-w-96 max-h-96 rounded-md overflow-hidden"
-          />
-          <div>
-            <For each={tracker()?.attendees}>
-              {(attendee) => <div>{attendee.name}</div>}
-            </For>
-          </div>
+        <div class="flex flex-col md:flex-row gap-8">
+          <Card class="flex-grow">
+            <CardHeader>
+              <CardTitle class="text-xl">Scan to attend</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <a href={attendUrl} target="_blank">
+                <div
+                  innerHTML={svgHtml}
+                  class="max-w-full max-h-full rounded-md overflow-hidden"
+                />
+              </a>
+            </CardContent>
+          </Card>
+          <Card class="flex-grow">
+            <CardHeader>
+              <CardTitle class="text-xl">Here</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <For each={tracker()?.attendees}>
+                {(attendee) => <div>{attendee.name}</div>}
+              </For>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
