@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 
 export const trackers = sqliteTable("tracker", {
   id: text().primaryKey().$defaultFn(nanoid),
+  name: text().notNull(),
   closed: integer({ mode: "boolean" }).default(false).notNull(),
   createdAt: integer({ mode: "timestamp" })
     .notNull()
@@ -35,3 +36,5 @@ export const attendeesRelations = relations(attendees, ({ one }) => ({
 }));
 export type Attendee = typeof attendees.$inferSelect;
 export type AttendeeInsert = typeof attendees.$inferInsert;
+
+export type TrackerWithAttendees = Tracker & { attendees: Attendee[] };

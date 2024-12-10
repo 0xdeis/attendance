@@ -19,7 +19,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/solid-table";
 import { TextField, TextFieldRoot } from "@/components/ui/textfield";
-import { For, Show, splitProps, Accessor, createSignal } from "solid-js";
+import { For, Show, splitProps, Accessor, createSignal, JSX } from "solid-js";
 import {
   Table,
   TableBody,
@@ -34,6 +34,7 @@ import { DropdownMenuSubTriggerProps } from "@kobalte/core/dropdown-menu";
 type Props<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: Accessor<TData[] | undefined>;
+  children: JSX.Element;
 };
 
 export const DataTable = <TData, TValue>(props: Props<TData, TValue>) => {
@@ -83,45 +84,50 @@ export const DataTable = <TData, TValue>(props: Props<TData, TValue>) => {
 
   return (
     <div>
-      <div class="flex items-center py-4">
-        <TextFieldRoot>
-          <TextField
-            placeholder="Filter title..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onInput={(event) => {
-              return table
-                .getColumn("title")
-                ?.setFilterValue(event.currentTarget.value);
-            }}
-            class="max-w-sm"
-          />
-        </TextFieldRoot>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            as={(props: DropdownMenuSubTriggerProps) => (
-              <Button variant="outline" class="ml-auto" {...props}>
-                Columns
-              </Button>
-            )}
-          />
-          <DropdownMenuContent>
-            <For
-              each={table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())}
-            >
-              {(item) => (
-                <DropdownMenuCheckboxItem
-                  class="capitalize"
-                  checked={item.getIsVisible()}
-                  onChange={(value) => item.toggleVisibility(!!value)}
-                >
-                  {item.id}
-                </DropdownMenuCheckboxItem>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center py-4 gap-2 grow">{props.children}</div>
+        <div class="flex items-center py-4 gap-2">
+          <TextFieldRoot>
+            <TextField
+              placeholder="Filter title..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onInput={(event) => {
+                return table
+                  .getColumn("name")
+                  ?.setFilterValue(event.currentTarget.value);
+              }}
+              class="max-w-sm"
+            />
+          </TextFieldRoot>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              as={(props: DropdownMenuSubTriggerProps) => (
+                <Button variant="outline" class="ml-auto" {...props}>
+                  Columns
+                </Button>
               )}
-            </For>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            />
+            <DropdownMenuContent>
+              <For
+                each={table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())}
+              >
+                {(item) => (
+                  <DropdownMenuCheckboxItem
+                    class="capitalize"
+                    checked={item.getIsVisible()}
+                    onChange={(value) => item.toggleVisibility(!!value)}
+                  >
+                    {item.id}
+                  </DropdownMenuCheckboxItem>
+                )}
+              </For>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div class="rounded-md border">
         <Table>

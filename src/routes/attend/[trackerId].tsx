@@ -24,21 +24,23 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
-const attendEvent = action(async (trackerId: string, formData: FormData) => {
-  "use server";
-  const name = String(formData.get("name"));
-  if (!name) {
-    return;
-  }
+const attendEventAction = action(
+  async (trackerId: string, formData: FormData) => {
+    "use server";
+    const name = String(formData.get("name"));
+    if (!name) {
+      return;
+    }
 
-  await db.insert(schema.attendees).values({ name, trackerId });
-  throw redirect(`/${trackerId}`);
-});
+    await db.insert(schema.attendees).values({ name, trackerId });
+    throw redirect(`/${trackerId}`);
+  },
+);
 
 export default function Attend() {
   const params = useParams();
   const trackerId = params.trackerId;
-  const submission = useSubmission(attendEvent);
+  const submission = useSubmission(attendEventAction);
   const tracker = createAsync(() => trackerById(trackerId));
 
   return (
@@ -51,7 +53,7 @@ export default function Attend() {
             </CardHeader>
             <CardContent>
               <form
-                action={attendEvent.with(trackerId)}
+                action={attendEventAction.with(trackerId)}
                 method="post"
                 class="gap-2 flex flex-col"
               >

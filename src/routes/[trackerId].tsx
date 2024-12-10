@@ -1,4 +1,4 @@
-import { RouteDefinition, createAsync, useParams } from "@solidjs/router";
+import { RouteDefinition, createAsync, useParams, A } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { renderSVG } from "uqr";
 import { DATE_FORMATTER } from "@/utils";
@@ -47,12 +47,12 @@ export default function Tracker() {
               <CardTitle class="text-xl">Scan to attend</CardTitle>
             </CardHeader>
             <CardContent>
-              <a href={attendUrl} target="_blank">
+              <A href={attendUrl} target="_blank">
                 <div
                   innerHTML={svgHtml}
                   class="max-w-full max-h-full rounded-md overflow-hidden"
                 />
-              </a>
+              </A>
             </CardContent>
           </Card>
           <Card class="flex-grow">
@@ -69,15 +69,4 @@ export default function Tracker() {
       </div>
     </div>
   );
-
-  // return (
-  //   <main class="w-full p-4 space-y-2">
-  //     <Suspense fallback={"loading..."}>
-  //       <h1 class="font-bold text-xl">tracker id: {params.trackerId}</h1>
-  //       <h2 class="text-lg font-mono">tracker: {JSON.stringify(tracker())}</h2>
-  //       <a href={attendUrl}>{attendUrl}</a>
-  //
-  //     </Suspense>
-  //   </main>
-  // );
 }

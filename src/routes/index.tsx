@@ -4,17 +4,16 @@ import {
   createAsync,
   query,
   redirect,
-  useAction,
+  useSubmission,
 } from "@solidjs/router";
-import { For, Suspense, createSignal } from "solid-js";
+import { Show, Suspense } from "solid-js";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { DATE_FORMATTER } from "@/utils";
 import { Button } from "@/components/ui/button";
-import type { Tracker } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { DataTable } from "./_components/data-table";
-import { columns, tasks } from "./_components/columns";
+import { columns } from "./_components/columns";
+import { TextField, TextFieldRoot } from "@/components/ui/textfield";
 
 export const route = {
   preload() {
@@ -22,19 +21,14 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
-const closeTrackerAction = action(async (trackerId: Tracker["id"]) => {
-  "use server";
-  await db
-    .update(schema.trackers)
-    .set({ closed: true })
-    .where(eq(schema.trackers.id, trackerId));
-  throw redirect("/");
-});
-
-const createTrackerAction = action(async () => {
+const createTrackerAction = action(async (formData: FormData) => {
   "use server";
 
-  const trackers = await db.insert(schema.trackers).values({}).returning();
+  const name = String(formData.get("name"));
+  const trackers = await db
+    .insert(schema.trackers)
+    .values({ name })
+    .returning();
   const tracker = trackers[0];
   throw redirect(`/${tracker.id}`, {
     revalidate: getAllTrackersAction.keyFor(),
@@ -48,34 +42,39 @@ const getAllTrackersAction = query(async () => {
 
 export default function Home() {
   const trackers = createAsync(async () => await getAllTrackersAction());
-  const createTracker = useAction(createTrackerAction);
-  const closeTracker = useAction(closeTrackerAction);
-  const [data, setData] = createSignal(tasks);
+  const submission = useSubmission(createTrackerAction);
+
   return (
-    <div class="flex flex-col">
-      <Button onClick={() => createTracker()} class="max-w-fit">
-        New Tracker
-      </Button>
+    <div class="flex flex-col px-8 pt-8">
       <Suspense fallback={"loading..."}>
-        <For each={trackers()}>
-          {(tracker) => (
-            <div class="flex flex-row gap-2">
-              <a href={`/${tracker.id}`}>
-                {tracker.closed && "(closed)"}{" "}
-                {DATE_FORMATTER.format(tracker.createdAt)} | {tracker.id} |{" "}
-                {tracker.attendees.length}
-              </a>
-              <Button
-                onClick={() => closeTracker(tracker.id)}
-                disabled={tracker.closed}
+        <Show when={trackers()}>
+          {(trackers) => (
+            <DataTable columns={columns} data={trackers}>
+              <form
+                action={createTrackerAction}
+                method="post"
+                class="flex w-full max-w-lg shrink-0 items-center space-x-2"
               >
-                Close
-              </Button>
-            </div>
+                <TextFieldRoot class="grow">
+                  <TextField
+                    autocomplete="nope"
+                    name="name"
+                    value={`Attendance ${DATE_FORMATTER.format(new Date())}`}
+                  />
+                </TextFieldRoot>
+
+                <Button
+                  type="submit"
+                  class="max-w-fit"
+                  disabled={submission.pending}
+                >
+                  New Tracker
+                </Button>
+              </form>
+            </DataTable>
           )}
-        </For>
+        </Show>
       </Suspense>
-      <DataTable columns={columns} data={data} />
     </div>
   );
 }
