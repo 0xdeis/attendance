@@ -13,7 +13,7 @@ export const route = {
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return window.location.origin;
-  if (process.env.URL) return `https://${process.env.URL}`;
+  if (process.env.URL) return `${process.env.URL}`;
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
 
