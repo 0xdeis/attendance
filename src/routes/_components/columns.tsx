@@ -12,6 +12,7 @@ import { Match, Switch } from "solid-js";
 import { toggleClosedTrackerAction } from "@/actions";
 import { A, useAction } from "@solidjs/router";
 import { RenameDialog } from "@/components/rename-dialog";
+import { DATE_FORMATTER } from "@/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod or Validbot schema here if you want.
@@ -100,28 +101,76 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
   },
   {
     accessorKey: "status",
-    header: ({ column }) => {
+    enableSorting: true,
+    enableMultiSort: true,
+    sortingFn: (a, b) => +a.original.closed - +b.original.closed,
+    header: (props) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => {
+            console.log(
+              "hi",
+              props.table.getRowModel().rows.map((r) => r.original),
+            );
+            props.column.toggleSorting(props.column.getIsSorted() === "asc");
+          }}
         >
           Status
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="ml-2 size-4"
-            aria-hidden="true"
-            viewBox="0 0 24 24"
+          <Switch
+            fallback={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m8 9l4-4l4 4m0 6l-4 4l-4-4"
+                />
+              </svg>
+            }
           >
-            <path
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 5v14m4-4l-4 4m-4-4l4 4"
-            />
-          </svg>
+            <Match when={props.column.getIsSorted() === "asc"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 5v14m4-10l-4-4M8 9l4-4"
+                />
+              </svg>
+            </Match>
+            <Match when={props.column.getIsSorted() === "desc"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 5v14m4-4l-4 4m-4-4l4 4"
+                />
+              </svg>
+            </Match>
+          </Switch>
         </Button>
       );
     },
@@ -178,6 +227,89 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
   {
     header: "Attendees",
     cell: (props) => props.row.original.attendees.length,
+  },
+  {
+    accessorKey: "createdAt",
+    header: (props) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => {
+            console.log(
+              "hi",
+              props.table.getRowModel().rows.map((r) => r.original),
+            );
+            props.column.toggleSorting(props.column.getIsSorted() === "asc");
+          }}
+        >
+          Created at
+          <Switch
+            fallback={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m8 9l4-4l4 4m0 6l-4 4l-4-4"
+                />
+              </svg>
+            }
+          >
+            <Match when={props.column.getIsSorted() === "asc"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 5v14m4-10l-4-4M8 9l4-4"
+                />
+              </svg>
+            </Match>
+            <Match when={props.column.getIsSorted() === "desc"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 5v14m4-4l-4 4m-4-4l4 4"
+                />
+              </svg>
+            </Match>
+          </Switch>
+        </Button>
+      );
+    },
+    cell: (props) => (
+      <time
+        title={props.row.original.createdAt.toLocaleString()}
+        datetime={props.row.original.createdAt.toLocaleString()}
+      >
+        {DATE_FORMATTER.format(props.row.original.createdAt)}
+      </time>
+    ),
+    sortingFn: (a, b) =>
+      a.original.createdAt.getTime() - b.original.createdAt.getTime(),
   },
   {
     id: "actions",

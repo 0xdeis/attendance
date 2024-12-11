@@ -60,6 +60,7 @@ export const DataTable = <TData, TValue>(props: Props<TData, TValue>) => {
     //     pageSize: 1,
     //   },
     // },
+    enableRowSelection: true,
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
     getFilteredRowModel: getFilteredRowModel(),
