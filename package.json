@@ -11,15 +11,16 @@
   "dependencies": {
     "@kobalte/core": "^0.13.7",
     "@libsql/client": "^0.14.0",
-    "@solidjs/router": "^0.15.1",
-    "@solidjs/start": "^1.0.10",
+    "@solidjs/router": "^0.15.3",
+    "@solidjs/start": "^1.0.11",
     "@tanstack/solid-table": "^8.20.5",
+    "better-auth": "^1.1.15",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.37.0",
     "nanoid": "^5.0.9",
-    "solid-js": "^1.9.2",
-    "tailwind-merge": "^2.5.5",
+    "solid-js": "^1.9.4",
+    "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "uqr": "^0.1.2",
     "vinxi": "^0.4.3"
@@ -31,7 +32,7 @@
     "@fsouza/prettierd": "^0.25.4",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.29.1",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16"
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17"
   }
 }

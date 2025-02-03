@@ -12,9 +12,10 @@
     "noEmit": true,
     "types": ["vinxi/types/client"],
     "isolatedModules": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }
