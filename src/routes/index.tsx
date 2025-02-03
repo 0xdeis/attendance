@@ -1,5 +1,5 @@
 import {
-  RouteDefinition,
+  type RouteDefinition,
   action,
   createAsync,
   query,
@@ -24,12 +24,14 @@ export const route = {
 const createTrackerAction = action(async (formData: FormData) => {
   "use server";
 
-  const name = String(formData.get("name"));
-  const trackers = await db
+  const name = String(formData.get("name") as string);
+  const [tracker] = await db
     .insert(schema.trackers)
     .values({ name })
     .returning();
-  const tracker = trackers[0];
+  if (!tracker) {
+    throw new Error("DB insert failed");
+  }
   throw redirect(`/${tracker.id}`, {
     revalidate: getAllTrackersAction.keyFor(),
   });

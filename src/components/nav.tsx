@@ -1,5 +1,5 @@
 import { A } from "@solidjs/router";
-import { JSX, mergeProps } from "solid-js";
+import { type JSX, mergeProps } from "solid-js";
 
 export function Nav() {
   return (

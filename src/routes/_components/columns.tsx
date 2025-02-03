@@ -1,11 +1,5 @@
 import type { ColumnDef } from "@tanstack/solid-table";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Checkbox, CheckboxControl } from "@/components/ui/checkbox";
 import type { TrackerWithAttendees } from "@/db/schema";
 import { Match, Switch } from "solid-js";

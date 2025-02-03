@@ -1,4 +1,4 @@
-import { RouteDefinition, createAsync, useParams, A } from "@solidjs/router";
+import { type RouteDefinition, createAsync, useParams, A } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { renderSVG } from "uqr";
 import { DATE_FORMATTER } from "@/utils";
@@ -7,7 +7,7 @@ import { trackerById } from "@/actions";
 
 export const route = {
   preload({ params }) {
-    void trackerById(params.trackerId);
+    void trackerById(params.trackerId!);
   },
 } satisfies RouteDefinition;
 
@@ -19,7 +19,7 @@ function getBaseUrl() {
 
 export default function Tracker() {
   const params = useParams();
-  const tracker = createAsync(() => trackerById(params.trackerId));
+  const tracker = createAsync(() => trackerById(params.trackerId!));
   const attendUrl = `${getBaseUrl()}/attend/${params.trackerId}`;
   const svgHtml = renderSVG(attendUrl);
 

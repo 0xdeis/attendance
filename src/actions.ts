@@ -2,7 +2,7 @@ import { action, query, redirect } from "@solidjs/router";
 import { db } from "./db";
 import * as schema from "@/db/schema";
 import { eq, inArray, not } from "drizzle-orm";
-import { Tracker } from "@/db/schema";
+import { type Tracker } from "@/db/schema";
 
 export const trackerById = query(async (id: string) => {
   "use server";
@@ -28,7 +28,7 @@ export const toggleClosedTrackerAction = action(
 export const renameTrackerAction = action(
   async (trackerId: Tracker["id"], formData: FormData) => {
     "use server";
-    const name = String(formData.get("name"));
+    const name = String(formData.get("name") as string);
     console.log("name", { name });
     await db
       .update(schema.trackers)

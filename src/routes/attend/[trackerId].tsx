@@ -1,5 +1,5 @@
 import {
-  RouteDefinition,
+  type RouteDefinition,
   action,
   createAsync,
   redirect,
@@ -20,14 +20,14 @@ import { Show } from "solid-js";
 
 export const route = {
   preload({ params }) {
-    void trackerById(params.trackerId);
+    void trackerById(params.trackerId!);
   },
 } satisfies RouteDefinition;
 
 const attendEventAction = action(
   async (trackerId: string, formData: FormData) => {
     "use server";
-    const name = String(formData.get("name"));
+    const name = String(formData.get("name") as string);
     if (!name) {
       return;
     }
@@ -39,7 +39,7 @@ const attendEventAction = action(
 
 export default function Attend() {
   const params = useParams();
-  const trackerId = params.trackerId;
+  const trackerId = params.trackerId!;
   const submission = useSubmission(attendEventAction);
   const tracker = createAsync(() => trackerById(trackerId));
 
