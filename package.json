@@ -9,10 +9,11 @@
     "db:studio": "drizzle-kit studio",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write"
   },
   "dependencies": {
-    "@kobalte/core": "^0.13.7",
+    "@kobalte/core": "^0.13.8",
     "@libsql/client": "^0.14.0",
     "@solidjs/router": "^0.15.3",
     "@solidjs/start": "^1.0.11",
@@ -21,7 +22,7 @@
     "better-auth": "^1.1.15",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "drizzle-orm": "^0.37.0",
+    "drizzle-orm": "^0.39.1",
     "nanoid": "^5.0.9",
     "solid-js": "^1.9.4",
     "tailwind-merge": "^2.6.0",
@@ -37,7 +38,7 @@
     "@types/eslint": "^9.6.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "autoprefixer": "^10.4.20",
-    "drizzle-kit": "^0.29.1",
+    "drizzle-kit": "^0.30.4",
     "eslint": "8",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17"

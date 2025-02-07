@@ -66,7 +66,7 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
     header: "Name",
     cell: (props) => (
       <A
-        href={`/${props.row.original.id}`}
+        href={`/t/${props.row.original.id}`}
         class="underline underline-offset-4 hover:text-primary flex gap-1 items-center"
         target="_blank"
       >
@@ -103,10 +103,6 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
         <Button
           variant="ghost"
           onClick={() => {
-            console.log(
-              "hi",
-              props.table.getRowModel().rows.map((r) => r.original),
-            );
             props.column.toggleSorting(props.column.getIsSorted() === "asc");
           }}
         >
@@ -229,10 +225,6 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
         <Button
           variant="ghost"
           onClick={() => {
-            console.log(
-              "hi",
-              props.table.getRowModel().rows.map((r) => r.original),
-            );
             props.column.toggleSorting(props.column.getIsSorted() === "asc");
           }}
         >

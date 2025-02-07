@@ -1,17 +1,42 @@
 import { A } from "@solidjs/router";
-import { type JSX, mergeProps } from "solid-js";
+import { type JSX, Match, mergeProps, Switch } from "solid-js";
+import { Button } from "./ui/button";
+import { authClient } from "@/lib/auth-client";
 
 export function Nav() {
+  const session = authClient.useSession();
   return (
     <header>
-      <nav class="h-16 bg-black flex items-center px-8">
-        <A href="https://0xdeis.com">
-          <HackLogo />
-        </A>
-        <Slash />
-        <A href="/">
-          <CheckboxLogo />
-        </A>
+      <nav class="h-16 bg-black flex items-center justify-between px-8">
+        <div class="flex items-center">
+          <A href="https://0xdeis.com">
+            <HackLogo />
+          </A>
+          <Slash />
+          <A href="/">
+            <CheckboxLogo />
+          </A>
+        </div>
+        <Switch>
+          <Match when={session().data}>
+            <Button variant={"secondary"} onClick={() => authClient.signOut()}>
+              Sign Out
+            </Button>
+          </Match>
+          <Match when={!session().data}>
+            <Button
+              variant={"secondary"}
+              onClick={() =>
+                authClient.signIn.social({
+                  provider: "google",
+                  callbackURL: "/dashboard",
+                })
+              }
+            >
+              Sign In
+            </Button>
+          </Match>
+        </Switch>
       </nav>
     </header>
   );
