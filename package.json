@@ -34,7 +34,7 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@fsouza/prettierd": "^0.25.4",
+    "@fsouza/prettierd": "^0.26.1",
     "@types/eslint": "^9.6.1",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "autoprefixer": "^10.4.20",
