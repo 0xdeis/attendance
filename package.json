@@ -28,7 +28,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "uqr": "^0.1.2",
-    "vinxi": "^0.4.3"
+    "vinxi": "^0.5.3"
   },
   "engines": {
     "node": ">=18"
