@@ -1,4 +1,10 @@
-import { action, createAsync, useParams, useSubmission } from "@solidjs/router";
+import {
+  action,
+  createAsync,
+  redirect,
+  useParams,
+  useSubmission,
+} from "@solidjs/router";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { Button } from "@/components/ui/button";
@@ -25,11 +31,10 @@ const attendEventAction = action(async (trackerId: string, userId: string) => {
       console.log(
         `Attempting to attend a non-existing or closed tracker, exiting, ${JSON.stringify(tracker)}`,
       );
-      return;
     }
     await tx.insert(schema.attendees).values({ userId, trackerId });
   });
-  // throw redirect(`/t/${trackerId}`);
+  throw redirect(`/t/done`);
 });
 
 export default function Attend() {
