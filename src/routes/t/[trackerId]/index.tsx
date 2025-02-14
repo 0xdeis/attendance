@@ -47,7 +47,7 @@ export default function Tracker() {
   onCleanup(() => clearInterval(poll));
 
   return (
-    <div class="min-h-screen">
+    <div class="min-h-screen pt-20">
       <div class="max-w-6xl mx-auto px-4 py-8">
         <div class="flex items-center flex-col justify-center mb-8">
           <h1 class="text-3xl font-bold text-gray-900">

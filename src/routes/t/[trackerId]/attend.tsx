@@ -44,39 +44,41 @@ export default function Attend() {
   const tracker = createAsync(() => trackerById(trackerId));
 
   return (
-    <Show when={session()}>
-      {(session) => (
-        <Show when={tracker()}>
-          {(tracker) => (
-            <div class="p-4 flex justify-center">
-              <Card class="max-w-screen-md flex-grow">
-                <CardHeader>
-                  <CardTitle>
-                    {tracker().name} {tracker().closed && "(closed)"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form
-                    action={attendEventAction.with(
-                      trackerId,
-                      session().user.id,
-                    )}
-                    method="post"
-                    class="gap-2 flex flex-col"
-                  >
-                    <Button
-                      type="submit"
-                      disabled={tracker().closed || submission.pending}
+    <main class="min-h-screen w-full pt-20">
+      <Show when={session()}>
+        {(session) => (
+          <Show when={tracker()}>
+            {(tracker) => (
+              <div class="p-4 flex justify-center">
+                <Card class="max-w-screen-md flex-grow">
+                  <CardHeader>
+                    <CardTitle>
+                      {tracker().name} {tracker().closed && "(closed)"}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form
+                      action={attendEventAction.with(
+                        trackerId,
+                        session().user.id,
+                      )}
+                      method="post"
+                      class="gap-2 flex flex-col"
                     >
-                      Attend
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </Show>
-      )}
-    </Show>
+                      <Button
+                        type="submit"
+                        disabled={tracker().closed || submission.pending}
+                      >
+                        Attend
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </Show>
+        )}
+      </Show>
+    </main>
   );
 }

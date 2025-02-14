@@ -58,39 +58,41 @@ export default function DashboardPage() {
   );
   const submission = useSubmission(createTrackerAction);
   return (
-    <div class="flex flex-col px-8 pt-8">
-      <Suspense fallback={"loading..."}>
-        <Show when={session()}>
-          {(session) => (
-            <Show when={trackers()}>
-              {(trackers) => (
-                <DataTable columns={columns} data={trackers}>
-                  <form
-                    action={createTrackerAction.with(session().user.id ?? "")}
-                    method="post"
-                    class="flex w-full max-w-lg shrink-0 items-center space-x-2"
-                  >
-                    <TextFieldRoot class="grow">
-                      <TextField
-                        autocomplete="nope"
-                        name="name"
-                        value={`Attendance ${DATE_FORMATTER.format(new Date())}`}
-                      />
-                    </TextFieldRoot>
-                    <Button
-                      type="submit"
-                      class="max-w-fit"
-                      disabled={submission.pending}
+    <main class="min-h-screen w-full pt-20">
+      <div class="flex flex-col px-8 pt-8">
+        <Suspense fallback={"loading..."}>
+          <Show when={session()}>
+            {(session) => (
+              <Show when={trackers()}>
+                {(trackers) => (
+                  <DataTable columns={columns} data={trackers}>
+                    <form
+                      action={createTrackerAction.with(session().user.id ?? "")}
+                      method="post"
+                      class="flex w-full max-w-lg shrink-0 items-center space-x-2"
                     >
-                      New Tracker
-                    </Button>
-                  </form>
-                </DataTable>
-              )}
-            </Show>
-          )}
-        </Show>
-      </Suspense>
-    </div>
+                      <TextFieldRoot class="grow">
+                        <TextField
+                          autocomplete="nope"
+                          name="name"
+                          value={`Attendance ${DATE_FORMATTER.format(new Date())}`}
+                        />
+                      </TextFieldRoot>
+                      <Button
+                        type="submit"
+                        class="max-w-fit"
+                        disabled={submission.pending}
+                      >
+                        New Tracker
+                      </Button>
+                    </form>
+                  </DataTable>
+                )}
+              </Show>
+            )}
+          </Show>
+        </Suspense>
+      </div>
+    </main>
   );
 }

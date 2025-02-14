@@ -6,7 +6,7 @@ import { authClient } from "@/lib/auth-client";
 export function Nav() {
   const session = authClient.useSession();
   return (
-    <header>
+    <header class="absolute w-full">
       <nav class="h-16 bg-black flex items-center justify-between px-8">
         <div class="flex items-center">
           <A href="https://0xdeis.com">
