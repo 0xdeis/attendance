@@ -1,11 +1,5 @@
 import type { ColumnDef } from "@tanstack/solid-table";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Checkbox, CheckboxControl } from "@/components/ui/checkbox";
 import type { TrackerWithAttendees } from "@/db/schema";
 import { Match, Switch } from "solid-js";
@@ -72,7 +66,7 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
     header: "Name",
     cell: (props) => (
       <A
-        href={`/${props.row.original.id}`}
+        href={`/t/${props.row.original.id}`}
         class="underline underline-offset-4 hover:text-primary flex gap-1 items-center"
         target="_blank"
       >
@@ -109,10 +103,6 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
         <Button
           variant="ghost"
           onClick={() => {
-            console.log(
-              "hi",
-              props.table.getRowModel().rows.map((r) => r.original),
-            );
             props.column.toggleSorting(props.column.getIsSorted() === "asc");
           }}
         >
@@ -235,10 +225,6 @@ export const columns: ColumnDef<TrackerWithAttendees>[] = [
         <Button
           variant="ghost"
           onClick={() => {
-            console.log(
-              "hi",
-              props.table.getRowModel().rows.map((r) => r.original),
-            );
             props.column.toggleSorting(props.column.getIsSorted() === "asc");
           }}
         >

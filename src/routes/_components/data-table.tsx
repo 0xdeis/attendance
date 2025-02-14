@@ -19,7 +19,14 @@ import {
   getFilteredRowModel,
 } from "@tanstack/solid-table";
 import { TextField, TextFieldRoot } from "@/components/ui/textfield";
-import { For, Show, splitProps, Accessor, createSignal, JSX } from "solid-js";
+import {
+  For,
+  Show,
+  splitProps,
+  type Accessor,
+  createSignal,
+  type JSX,
+} from "solid-js";
 import {
   Table,
   TableBody,
@@ -29,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuSubTriggerProps } from "@kobalte/core/dropdown-menu";
+import { type DropdownMenuSubTriggerProps } from "@kobalte/core/dropdown-menu";
 
 type Props<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -50,7 +57,7 @@ export const DataTable = <TData, TValue>(props: Props<TData, TValue>) => {
 
   const table = createSolidTable({
     get data() {
-      return local.data() || [];
+      return local.data() ?? [];
     },
     columns: local.columns,
     getCoreRowModel: getCoreRowModel(),
