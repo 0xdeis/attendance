@@ -4,8 +4,9 @@ import * as schema from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSession, trackerById } from "@/actions";
-import { Show } from "solid-js";
+import { Switch, Match, Show } from "solid-js";
 import { eq } from "drizzle-orm";
+import { createSignal } from "solid-js";
 
 // export const route = {
 //   preload({ params }) {
@@ -13,24 +14,29 @@ import { eq } from "drizzle-orm";
 //   },
 // } satisfies RouteDefinition;
 
-const attendEventAction = action(async (trackerId: string, userId: string) => {
-  "use server";
+const [submitted, setSubmitted] = createSignal(false);
 
-  await db.transaction(async (tx) => {
-    const tracker = await tx.query.trackers.findFirst({
-      where: eq(schema.trackers.id, trackerId),
+const attendEventAction = action(
+  async (trackerId: string, userId: string) => {
+    "use server";
+
+    await db.transaction(async (tx) => {
+      const tracker = await tx.query.trackers.findFirst({
+        where: eq(schema.trackers.id, trackerId),
+      });
+
+      if (!tracker || tracker.closed) {
+        console.log(
+          `Attempting to attend a non-existing or closed tracker, exiting, ${JSON.stringify(tracker)}`,
+        );
+        return;
+      }
+      await tx.insert(schema.attendees).values({ userId, trackerId });
     });
-
-    if (!tracker || tracker.closed) {
-      console.log(
-        `Attempting to attend a non-existing or closed tracker, exiting, ${JSON.stringify(tracker)}`,
-      );
-      return;
-    }
-    await tx.insert(schema.attendees).values({ userId, trackerId });
-  });
-  // throw redirect(`/t/${trackerId}`);
-});
+    // throw redirect(`/t/${trackerId}`);
+  },
+  { onComplete: () => setSubmitted(true) },
+);
 
 export default function Attend() {
   const params = useParams();
@@ -49,32 +55,48 @@ export default function Attend() {
         {(session) => (
           <Show when={tracker()}>
             {(tracker) => (
-              <div class="p-4 flex justify-center">
-                <Card class="max-w-screen-md flex-grow">
-                  <CardHeader>
-                    <CardTitle>
-                      {tracker().name} {tracker().closed && "(closed)"}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <form
-                      action={attendEventAction.with(
-                        trackerId,
-                        session().user.id,
-                      )}
-                      method="post"
-                      class="gap-2 flex flex-col"
-                    >
-                      <Button
-                        type="submit"
-                        disabled={tracker().closed || submission.pending}
-                      >
-                        Attend
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </div>
+              <Switch>
+                <Match when={!submitted()}>
+                  <div class="p-4 flex justify-center">
+                    <Card class="max-w-screen-md flex-grow">
+                      <CardHeader>
+                        <CardTitle>
+                          {tracker().name} {tracker().closed && "(closed)"}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <form
+                          action={attendEventAction.with(
+                            trackerId,
+                            session().user.id,
+                          )}
+                          method="post"
+                          class="gap-2 flex flex-col"
+                        >
+                          <Button
+                            type="submit"
+                            disabled={tracker().closed || submission.pending}
+                          >
+                            Attend
+                          </Button>
+                        </form>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </Match>
+                <Match when={submitted()}>
+                  <div class="p-4 flex justify-center">
+                    <Card class="max-w-screen-md flex-grow">
+                      <CardHeader>
+                        <CardTitle>You are here.</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        Check the screen to see your name.
+                      </CardContent>
+                    </Card>
+                  </div>
+                </Match>
+              </Switch>
             )}
           </Show>
         )}

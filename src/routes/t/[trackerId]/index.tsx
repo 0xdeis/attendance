@@ -5,7 +5,7 @@ import {
   A,
   revalidate,
 } from "@solidjs/router";
-import { For, onCleanup, Show } from "solid-js";
+import { For, onCleanup, Show, onMount } from "solid-js";
 import { renderSVG } from "uqr";
 import { DATE_FORMATTER } from "@/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,10 +41,12 @@ export default function Tracker() {
   const attendUrl = `${getBaseUrl()}/t/${params.trackerId}/attend`;
   const svgHtml = renderSVG(attendUrl);
 
-  const poll = setInterval(() => {
-    void revalidate(trackerById.keyFor(params.trackerId!));
-  }, 15000);
-  onCleanup(() => clearInterval(poll));
+  onMount(() => {
+    const poll = setInterval(() => {
+      void revalidate(trackerById.keyFor(params.trackerId!));
+    }, 15000);
+    onCleanup(() => clearInterval(poll));
+  });
 
   return (
     <div class="min-h-screen pt-20">

@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { PolymorphicCallbackProps } from "@kobalte/core/polymorphic";
-import { A, AnchorProps } from "@solidjs/router";
-import { ComponentProps } from "solid-js";
+import { A } from "@solidjs/router";
+
 export default function Home() {
   return (
     <section class="flex min-h-screen flex-col items-center justify-center space-y-10 py-24">

@@ -15,7 +15,7 @@ export const trackerById = query(async (id: string) => {
       creator: true,
     },
   });
-  if (!tracker) throw redirect("/");
+  if (!tracker) throw redirect("/dashboard");
   return tracker;
 }, "trackerById");
 
@@ -26,7 +26,7 @@ export const toggleClosedTrackerAction = action(
       .update(schema.trackers)
       .set({ closed: not(schema.trackers.closed) })
       .where(inArray(schema.trackers.id, trackerIds));
-    throw redirect("/");
+    throw redirect("/dashboard");
   },
 );
 
@@ -62,6 +62,7 @@ export const getSessionAdmin = query(async (redirectUrl: string) => {
 
   const adminEmails = process.env.ADMIN_EMAILS!.split(",");
   if (!adminEmails.includes(session.user.email)) {
+    // FIXME: return something so that we can say 'you are not permitted...'
     throw redirect("/");
   }
 
